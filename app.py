@@ -27,27 +27,27 @@ def mp3():
     ydl_opts = {
     'forcefilename': True,
     'restrictfilenames': True,
-	'format': 'bestaudio/best',
-    'outtmpl': '/var/www/html/%(id)s.%(ext)s',
-	'postprocessors':
+    'format': 'bestaudio/best',
+    'outtmpl': 'download_mp3/%(id)s.%(ext)s',
+    'postprocessors':
         [{
-    	    'key': 'FFmpegExtractAudio',
-    	    'preferredcodec': 'mp3',
-    	    'preferredquality': '192',
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
         }]
     }
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         info_dict = ydl.extract_info(video_url, download=True)
 
-    return infor_dict['display_id'] + '.mp3'
+    return info_dict['display_id'] + '.mp3'
 
 @app.route("/download_mp3/<path>", methods=['GET'])
 def download_mp3(path):
-    path = path.replace('/', '').replace('?', '')
+    #path = path.replace('/', '').replace('?', '')
     temp = path.split('.')
     if len(temp) > 2 or temp[1] != 'mp3':
         return 'invalid file'
-    return send_from_directory('.', path)
+    return send_from_directory('download_mp3', path)
 
 @app.route("/convert_mp4", methods=['POST'])
 def mp4():
@@ -56,22 +56,22 @@ def mp4():
     ydl_opts = {
     'forcefilename': True,
     'restrictfilenames': True,
-	'format': '137/best',
-    'outtmpl': '/var/www/html/%(id)s.%(ext)s',
+    'format': 'best',
+    'outtmpl': 'download_mp4/%(id)s.%(ext)s',
     }
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         info_dict = ydl.extract_info(video_url, download=True)
 
-    return infor_dict['display_id'] + '.mp4'
+    return info_dict['display_id'] + '.mp4'
 
 
 @app.route("/download_mp4/<path>", methods=['GET'])
 def download_mp4(path):
-    path = path.replace('/', '').replace('?', '')
+    #path = path.replace('/', '').replace('?', '')
     temp = path.split('.')
     if len(temp) > 2 or temp[1] != 'mp4':
         return 'invalid file'
-    return send_from_directory('.', path)
+    return send_from_directory('download_mp4', path)
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0',debug=True)
+    app.run(host='0.0.0.0',debug=False,port=80)
