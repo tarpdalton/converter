@@ -15,8 +15,8 @@ def purge(directory, pattern):
 
 @app.route("/")
 def index():
-    purge('.', '[a-zA-Z0-9]*.mp4')
-    purge('.', '[a-zA-Z0-9]*.mp3')
+    purge('.', '[a-zA-Z0-9]*\.mp4')
+    purge('.', '[a-zA-Z0-9]*\.mp3')
 
     return render_template('index.html')
 
